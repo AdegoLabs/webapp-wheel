@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -337,6 +338,15 @@
   </button>
   <div class="status" id="status"></div>
 
+  <!-- Диагностический блок — виден только при проблеме с initData -->
+  <div id="diag" style="display:none; margin-top:24px; padding:14px;
+       background:rgba(255,255,255,0.06); border:1px solid rgba(251,191,36,0.5);
+       border-radius:12px; font-family:monospace; font-size:11px;
+       max-width:92vw; word-break:break-all; line-height:1.6;">
+    <div style="color:#fbbf24; font-weight:bold; margin-bottom:8px;">⚠️ Diagnostic</div>
+    <div id="diagContent"></div>
+  </div>
+
   <div class="modal-bg" id="modal">
     <div class="modal">
       <div class="modal-icon">🎉</div>
@@ -354,6 +364,29 @@ tg.ready();
 tg.expand();
 tg.setBackgroundColor('#1a0b2e');
 try { tg.setHeaderColor('#1a0b2e'); } catch (e) {}
+
+// ── Диагностика initData ────────────────────────────────────────────────
+// Показывает на экране состояние WebApp, если initData пустой.
+function showDiag() {
+  const diag = document.getElementById('diag');
+  const content = document.getElementById('diagContent');
+  const initData = tg.initData || '';
+  const unsafe = tg.initDataUnsafe || {};
+  const hash = location.hash || '(no hash)';
+
+  let html = '';
+  html += `<b>version:</b> ${tg.version || '?'}<br>`;
+  html += `<b>platform:</b> ${tg.platform || '?'}<br>`;
+  html += `<b>initData length:</b> ${initData.length}<br>`;
+  html += `<b>initData:</b> ${initData ? initData.substring(0, 80) + '...' : '(EMPTY)'}<br>`;
+  html += `<b>initDataUnsafe.user.id:</b> ${unsafe.user ? unsafe.user.id : '(no user)'}<br>`;
+  html += `<b>initDataUnsafe.query_id:</b> ${unsafe.query_id || '(none)'}<br>`;
+  html += `<b>location.hash:</b> ${hash.substring(0, 120)}${hash.length > 120 ? '...' : ''}<br>`;
+  html += `<b>has tgWebAppData in hash:</b> ${hash.includes('tgWebAppData') ? 'YES' : 'NO'}<br>`;
+
+  content.innerHTML = html;
+  diag.style.display = 'block';
+}
 
 // ── Локализация ────────────────────────────────────────────────────────
 const I18N = {
@@ -551,6 +584,8 @@ async function loadState() {
   } catch (e) {
     console.error(e);
     statusEl.textContent = L.error;
+    // Если запрос упал — показываем диагностику, помогает понять что не так
+    showDiag();
   }
 }
 
