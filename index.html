@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -83,8 +82,8 @@
 
   .wheel-wrap {
     position: relative;
-    width: min(360px, 92vw);
-    height: min(360px, 92vw);
+    width: min(380px, 94vw);
+    height: min(380px, 94vw);
     margin-bottom: 28px;
     filter: drop-shadow(var(--shadow));
   }
@@ -245,6 +244,67 @@
     margin-top: 4px;
   }
 
+  /* Покупка сокращения кулдауна за Stars */
+  .skip-box {
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    margin-top: 16px;
+    width: min(360px, 92vw);
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(251, 191, 36, 0.25);
+    border-radius: 16px;
+  }
+  .skip-box.show { display: flex; }
+  .skip-hint {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-bottom: 2px;
+  }
+  #skipButtons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .skip-btn {
+    background: linear-gradient(135deg, #6c5ce7, #5546d0);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 14px;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    font-family: inherit;
+  }
+  .skip-btn:active { transform: scale(0.97); }
+  .skip-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+  .skip-btn-label {
+    text-align: left;
+    flex: 1;
+  }
+  .skip-btn-price {
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    padding: 5px 10px;
+    font-size: 15px;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+
   /* Модалка с результатом */
   .modal-bg {
     position: fixed;
@@ -288,8 +348,64 @@
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin-bottom: 28px;
+    margin-bottom: 18px;
     line-height: 1.3;
+  }
+
+  /* Блок с промокодом в модалке */
+  .promo-wrap {
+    display: none;
+    margin: 0 0 24px;
+    padding: 14px 16px;
+    background: rgba(251, 191, 36, 0.08);
+    border: 1.5px dashed rgba(251, 191, 36, 0.6);
+    border-radius: 14px;
+  }
+  .promo-wrap.show { display: block; }
+  .promo-label {
+    font-size: 12px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+  }
+  .promo-code {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    background: rgba(0, 0, 0, 0.35);
+    border-radius: 10px;
+    padding: 10px 14px;
+  }
+  .promo-code-text {
+    font-family: 'SF Mono', 'Menlo', 'Consolas', monospace;
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--gold-light);
+    letter-spacing: 1px;
+    flex: 1;
+    text-align: left;
+    word-break: break-all;
+  }
+  .promo-copy-btn {
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: #1a0b2e;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: transform 0.1s;
+  }
+  .promo-copy-btn:active { transform: scale(0.94); }
+  .promo-copy-btn.copied {
+    background: linear-gradient(135deg, #34d399, #10b981);
+    color: #fff;
   }
   .modal-btn {
     background: linear-gradient(135deg, #fbbf24, #f59e0b);
@@ -338,6 +454,12 @@
   </button>
   <div class="status" id="status"></div>
 
+  <!-- Кнопки покупки сокращения кулдауна за Stars (показываются только во время кулдауна) -->
+  <div id="skipBox" class="skip-box">
+    <div class="skip-hint" id="i18nSkipHint">Don't want to wait?</div>
+    <div id="skipButtons"></div>
+  </div>
+
   <!-- Диагностический блок — виден только при проблеме с initData -->
   <div id="diag" style="display:none; margin-top:24px; padding:14px;
        background:rgba(255,255,255,0.06); border:1px solid rgba(251,191,36,0.5);
@@ -352,6 +474,17 @@
       <div class="modal-icon">🎉</div>
       <div class="modal-title" id="i18nWonLabel">You won</div>
       <div class="modal-prize" id="modalPrize"></div>
+
+      <div class="promo-wrap" id="promoWrap">
+        <div class="promo-label" id="i18nPromoLabel">Your promo code</div>
+        <div class="promo-code">
+          <div class="promo-code-text" id="promoCode"></div>
+          <button class="promo-copy-btn" id="promoCopyBtn">
+            <span id="i18nCopy">Copy</span>
+          </button>
+        </div>
+      </div>
+
       <button class="modal-btn" id="modalClose">
         <span id="i18nClose">Close</span>
       </button>
@@ -392,25 +525,46 @@ function showDiag() {
 const I18N = {
   ru: { title:'🎰 Колесо фортуны', subtitle:'Крутите и выигрывайте бонусы казино', spin:'Крутить',
         nextIn:'Следующая прокрутка через', noBonuses:'Все бонусы уже получены! 🎊',
-        wonLabel:'Вы выиграли', close:'Закрыть', error:'Ошибка. Попробуйте позже.', spinning:'Крутится...' },
+        wonLabel:'Вы выиграли', close:'Закрыть', error:'Ошибка. Попробуйте позже.', spinning:'Крутится...',
+        promoLabel:'Ваш промокод', copy:'Копировать', copied:'Скопировано',
+        skipHint:'Не хочешь ждать?', skipTo:'Сократить до {min} мин',
+        paymentCancelled:'Платёж отменён', paymentFailed:'Платёж не прошёл', purchasing:'Покупка...' },
   en: { title:'🎰 Wheel of Fortune', subtitle:'Spin to win casino bonuses', spin:'Spin',
         nextIn:'Next spin in', noBonuses:'All bonuses claimed! 🎊',
-        wonLabel:'You won', close:'Close', error:'Error. Try again later.', spinning:'Spinning...' },
+        wonLabel:'You won', close:'Close', error:'Error. Try again later.', spinning:'Spinning...',
+        promoLabel:'Your promo code', copy:'Copy', copied:'Copied',
+        skipHint:"Don't want to wait?", skipTo:'Skip to {min} min',
+        paymentCancelled:'Payment cancelled', paymentFailed:'Payment failed', purchasing:'Purchasing...' },
   es: { title:'🎰 Ruleta de la Fortuna', subtitle:'Gira y gana bonos de casino', spin:'Girar',
         nextIn:'Siguiente giro en', noBonuses:'¡Todos los bonos reclamados! 🎊',
-        wonLabel:'Has ganado', close:'Cerrar', error:'Error. Inténtalo de nuevo.', spinning:'Girando...' },
+        wonLabel:'Has ganado', close:'Cerrar', error:'Error. Inténtalo de nuevo.', spinning:'Girando...',
+        promoLabel:'Tu código promocional', copy:'Copiar', copied:'Copiado',
+        skipHint:'¿No quieres esperar?', skipTo:'Reducir a {min} min',
+        paymentCancelled:'Pago cancelado', paymentFailed:'Pago fallido', purchasing:'Comprando...' },
   my: { title:'🎰 ကံစမ်းဘီး', subtitle:'လှည့်ပြီး ကာစီနိုဘောနပ်စ်များ ရယူပါ', spin:'လှည့်ရန်',
         nextIn:'နောက်တစ်ကြိမ်လှည့်ရန်', noBonuses:'ဘောနပ်စ်အားလုံး ရရှိပြီးပါပြီ! 🎊',
-        wonLabel:'သင်ရရှိသည်', close:'ပိတ်ရန်', error:'အမှားရှိနေသည်။', spinning:'လှည့်နေသည်...' },
+        wonLabel:'သင်ရရှိသည်', close:'ပိတ်ရန်', error:'အမှားရှိနေသည်။', spinning:'လှည့်နေသည်...',
+        promoLabel:'သင်၏ ပရိုမိုကုဒ်', copy:'ကူးယူရန်', copied:'ကူးယူပြီး',
+        skipHint:'မစောင့်ချင်ဘူးလား?', skipTo:'{min} မိနစ်အထိ လျှော့ချ',
+        paymentCancelled:'ငွေပေးချေမှု ပယ်ဖျက်ပြီး', paymentFailed:'ငွေပေးချေမှု မအောင်မြင်ပါ', purchasing:'ဝယ်ယူနေသည်...' },
   hi: { title:'🎰 भाग्य का चक्र', subtitle:'घुमाएं और कैसीनो बोनस जीतें', spin:'घुमाएं',
         nextIn:'अगला घुमाव में', noBonuses:'सभी बोनस मिल चुके हैं! 🎊',
-        wonLabel:'आपने जीता', close:'बंद करें', error:'त्रुटि।', spinning:'घूम रहा है...' },
+        wonLabel:'आपने जीता', close:'बंद करें', error:'त्रुटि।', spinning:'घूम रहा है...',
+        promoLabel:'आपका प्रोमो कोड', copy:'कॉपी', copied:'कॉपी किया',
+        skipHint:'इंतज़ार नहीं करना चाहते?', skipTo:'{min} मिनट तक कम करें',
+        paymentCancelled:'भुगतान रद्द', paymentFailed:'भुगतान विफल', purchasing:'खरीदना...' },
   uz: { title:'🎰 Omad g\'ildiragi', subtitle:'Aylantiring va kazino bonuslarini yutib oling', spin:'Aylantirish',
         nextIn:'Keyingi aylanish', noBonuses:'Barcha bonuslar olingan! 🎊',
-        wonLabel:'Siz yutdingiz', close:'Yopish', error:'Xatolik.', spinning:'Aylanmoqda...' },
+        wonLabel:'Siz yutdingiz', close:'Yopish', error:'Xatolik.', spinning:'Aylanmoqda...',
+        promoLabel:'Sizning promo kodingiz', copy:'Nusxalash', copied:'Nusxalandi',
+        skipHint:'Kutishni xohlamaysizmi?', skipTo:'{min} daqiqagacha qisqartirish',
+        paymentCancelled:"To'lov bekor qilindi", paymentFailed:"To'lov amalga oshmadi", purchasing:'Sotib olinmoqda...' },
   tl: { title:'🎰 Gulong ng Kapalaran', subtitle:'Iikot at manalo ng casino bonuses', spin:'Iikot',
         nextIn:'Susunod na pag-ikot sa', noBonuses:'Nakuha na lahat ng bonus! 🎊',
-        wonLabel:'Nanalo ka ng', close:'Isara', error:'May error.', spinning:'Umiikot...' }
+        wonLabel:'Nanalo ka ng', close:'Isara', error:'May error.', spinning:'Umiikot...',
+        promoLabel:'Ang iyong promo code', copy:'Kopyahin', copied:'Nakopya na',
+        skipHint:'Ayaw maghintay?', skipTo:'Bawasan sa {min} min',
+        paymentCancelled:'Kinansela ang bayad', paymentFailed:'Nabigo ang bayad', purchasing:'Bumibili...' }
 };
 const langCode = new URLSearchParams(location.search).get('lang') || 'en';
 const L = I18N[langCode] || I18N.en;
@@ -419,6 +573,9 @@ document.getElementById('i18nSubtitle').textContent = L.subtitle;
 document.getElementById('i18nSpin').textContent = L.spin;
 document.getElementById('i18nWonLabel').textContent = L.wonLabel;
 document.getElementById('i18nClose').textContent = L.close;
+document.getElementById('i18nPromoLabel').textContent = L.promoLabel;
+document.getElementById('i18nCopy').textContent = L.copy;
+document.getElementById('i18nSkipHint').textContent = L.skipHint;
 
 // ── API ────────────────────────────────────────────────────────────────
 // Базовый адрес API передаётся ботом через query-параметр ?api=...
@@ -455,6 +612,11 @@ function renderWheel(items) {
   const anglePerSeg = 360 / n;
   const R = 150;
 
+  // Размер шрифта — крупнее, ориентирован на читабельность
+  const fontSize = n <= 4 ? 22 : n <= 6 ? 19 : n <= 8 ? 16 : 14;
+  // Максимум символов в строке зависит от сегмента
+  const maxCharsPerLine = n <= 4 ? 13 : n <= 6 ? 11 : n <= 8 ? 10 : 9;
+
   // Сегменты
   items.forEach((b, i) => {
     const startDeg = i * anglePerSeg - 90;
@@ -473,31 +635,40 @@ function renderWheel(items) {
     path.setAttribute('stroke-width', '1.5');
     wheelSvg.appendChild(path);
 
-    // Текст вдоль радиуса сегмента
+    // Текст вдоль радиуса сегмента — ближе к краю, чтобы было больше места
     const midDeg = startDeg + anglePerSeg / 2;
     const midRad = midDeg * Math.PI / 180;
-    const textR = R * 0.62;
+    const textR = R * 0.66;
     const tx = textR * Math.cos(midRad);
     const ty = textR * Math.sin(midRad);
     const rotateText = midDeg + 90; // ориентация наружу
 
-    const lines = splitName(b.name, n);
+    const lines = splitName(b.name, maxCharsPerLine);
     const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     text.setAttribute('x', tx);
     text.setAttribute('y', ty);
     text.setAttribute('transform', `rotate(${rotateText} ${tx} ${ty})`);
     text.setAttribute('fill', '#fff');
     text.setAttribute('text-anchor', 'middle');
-    text.setAttribute('font-weight', '700');
-    text.setAttribute('font-size', n > 6 ? '11' : '13');
+    text.setAttribute('dominant-baseline', 'central');
+    text.setAttribute('font-weight', '900');
+    text.setAttribute('font-size', String(fontSize));
+    text.setAttribute('font-family',
+      "-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif");
+    // Жирная тёмная обводка — на ярком фоне читается отлично
     text.setAttribute('paint-order', 'stroke');
-    text.setAttribute('stroke', 'rgba(0,0,0,0.4)');
-    text.setAttribute('stroke-width', '0.8');
+    text.setAttribute('stroke', 'rgba(0,0,0,0.7)');
+    text.setAttribute('stroke-width', '2.5');
+    text.setAttribute('stroke-linejoin', 'round');
+    text.setAttribute('letter-spacing', '0.3');
 
+    const lineHeight = fontSize + 3;
     lines.forEach((line, li) => {
       const tspan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
       tspan.setAttribute('x', tx);
-      tspan.setAttribute('dy', li === 0 ? `${-(lines.length-1)*7}` : '14');
+      tspan.setAttribute('dy', li === 0
+        ? String(-(lines.length - 1) * lineHeight / 2)
+        : String(lineHeight));
       tspan.textContent = line;
       text.appendChild(tspan);
     });
@@ -507,16 +678,37 @@ function renderWheel(items) {
   renderLights(n);
 }
 
-function splitName(name, n) {
-  // Простой перенос на 2 строки, если слов несколько
-  if (n > 8 && name.length > 12) {
-    const mid = Math.floor(name.length / 2);
-    const spaceBefore = name.lastIndexOf(' ', mid);
-    const spaceAfter = name.indexOf(' ', mid);
-    const breakAt = spaceBefore > 0 ? spaceBefore : (spaceAfter > 0 ? spaceAfter : -1);
-    if (breakAt > 0) return [name.slice(0, breakAt), name.slice(breakAt + 1)];
+function splitName(name, maxCharsPerLine) {
+  // Если влезает в одну строку — возвращаем как есть
+  if (name.length <= maxCharsPerLine) return [name];
+
+  // Иначе аккуратно разбиваем по словам
+  const words = name.split(/\s+/);
+  if (words.length === 1) {
+    // Одно длинное слово — режем посередине
+    const mid = Math.ceil(name.length / 2);
+    return [name.slice(0, mid), name.slice(mid)];
   }
-  return [name];
+
+  const lines = [];
+  let current = '';
+  for (const word of words) {
+    if (!current) {
+      current = word;
+    } else if ((current + ' ' + word).length <= maxCharsPerLine) {
+      current += ' ' + word;
+    } else {
+      lines.push(current);
+      current = word;
+    }
+  }
+  if (current) lines.push(current);
+
+  // Максимум 2 строки на колесе — третья и далее будут наезжать
+  if (lines.length > 2) {
+    return [lines[0], lines.slice(1).join(' ')];
+  }
+  return lines;
 }
 
 function renderLights(segCount) {
@@ -571,22 +763,94 @@ async function loadState() {
       spinBtn.disabled = true;
       document.getElementById('i18nSpin').textContent = '✓';
       statusEl.textContent = L.noBonuses;
+      renderSkipButtons([]);
       return;
     }
     renderWheel(state.available);
     if (!state.can_spin && state.next_spin_at) {
       startCooldown(state.next_spin_at);
+      renderSkipButtons(state.skip_options || []);
     } else {
       spinBtn.disabled = false;
       document.getElementById('i18nSpin').textContent = L.spin;
       statusEl.textContent = '';
+      renderSkipButtons([]);
     }
   } catch (e) {
     console.error(e);
     statusEl.textContent = L.error;
+    renderSkipButtons([]);
     // Если запрос упал — показываем диагностику, помогает понять что не так
     showDiag();
   }
+}
+
+// ── Покупка сокращения кулдауна за Stars ───────────────────────────────
+function renderSkipButtons(options) {
+  const box = document.getElementById('skipBox');
+  const container = document.getElementById('skipButtons');
+  container.innerHTML = '';
+  if (!options || options.length === 0) {
+    box.classList.remove('show');
+    return;
+  }
+  options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'skip-btn';
+    btn.dataset.level = opt.level;
+    btn.innerHTML =
+      `<span class="skip-btn-label">${L.skipTo.replace('{min}', opt.remaining_min)}</span>` +
+      `<span class="skip-btn-price">⭐ ${opt.price}</span>`;
+    btn.onclick = () => purchaseSkip(opt.level, btn);
+    container.appendChild(btn);
+  });
+  box.classList.add('show');
+}
+
+async function purchaseSkip(level, btn) {
+  // Защита от двойного клика
+  if (btn.disabled) return;
+  const allBtns = document.querySelectorAll('.skip-btn');
+  allBtns.forEach(b => b.disabled = true);
+  const origHTML = btn.innerHTML;
+  btn.innerHTML = `<span class="skip-btn-label">${L.purchasing}</span><span class="skip-btn-price">⭐</span>`;
+
+  let invoiceUrl = null;
+  try {
+    const resp = await api('/api/wheel/create_invoice', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ level })
+    });
+    invoiceUrl = resp.invoice_url;
+  } catch (e) {
+    console.error('create_invoice failed', e);
+    statusEl.textContent = L.paymentFailed;
+    allBtns.forEach(b => b.disabled = false);
+    btn.innerHTML = origHTML;
+    return;
+  }
+
+  try { tg.HapticFeedback.impactOccurred('light'); } catch (e) {}
+
+  // Открываем нативный invoice-popup Telegram
+  tg.openInvoice(invoiceUrl, (status) => {
+    // status: 'paid' | 'cancelled' | 'failed' | 'pending'
+    btn.innerHTML = origHTML;
+    allBtns.forEach(b => b.disabled = false);
+    if (status === 'paid') {
+      try { tg.HapticFeedback.notificationOccurred('success'); } catch (e) {}
+      // Подождём чуть-чуть, чтобы бэк успел обработать successful_payment,
+      // и перезагрузим состояние — кулдаун уже будет сокращён.
+      setTimeout(() => loadState(), 1200);
+    } else if (status === 'cancelled') {
+      statusEl.textContent = L.paymentCancelled;
+      try { tg.HapticFeedback.notificationOccurred('warning'); } catch (e) {}
+    } else if (status === 'failed') {
+      statusEl.textContent = L.paymentFailed;
+      try { tg.HapticFeedback.notificationOccurred('error'); } catch (e) {}
+    }
+  });
 }
 
 // ── Прокрутка ──────────────────────────────────────────────────────────
@@ -642,7 +906,7 @@ async function spin() {
   // Ждём окончания анимации
   await new Promise(r => setTimeout(r, 5200));
 
-  showResult(result.bonus_name);
+  showResult(result.bonus_name, result.promo_code);
   fireConfetti();
 
   // Через секунду перезагружаем состояние (включит кулдаун)
@@ -652,14 +916,61 @@ async function spin() {
   }, 1500);
 }
 
-function showResult(name) {
+function showResult(name, promoCode) {
   document.getElementById('modalPrize').textContent = name;
+  const promoWrap = document.getElementById('promoWrap');
+  const promoEl = document.getElementById('promoCode');
+  if (promoCode) {
+    promoEl.textContent = promoCode;
+    promoWrap.classList.add('show');
+  } else {
+    promoWrap.classList.remove('show');
+    promoEl.textContent = '';
+  }
+  // Сброс кнопки копирования к исходному виду
+  const copyBtn = document.getElementById('promoCopyBtn');
+  copyBtn.classList.remove('copied');
+  document.getElementById('i18nCopy').textContent = L.copy;
+
   document.getElementById('modal').classList.add('show');
   try { tg.HapticFeedback.notificationOccurred('success'); } catch (e) {}
 }
 
 document.getElementById('modalClose').onclick = () => {
   document.getElementById('modal').classList.remove('show');
+};
+
+// Кнопка «Копировать промокод»
+document.getElementById('promoCopyBtn').onclick = async () => {
+  const code = document.getElementById('promoCode').textContent;
+  if (!code) return;
+  let ok = false;
+  try {
+    await navigator.clipboard.writeText(code);
+    ok = true;
+  } catch (e) {
+    // Fallback: создаём временный input и копируем через execCommand
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = code;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+    } catch (e2) { ok = false; }
+  }
+  if (ok) {
+    const btn = document.getElementById('promoCopyBtn');
+    btn.classList.add('copied');
+    document.getElementById('i18nCopy').textContent = L.copied;
+    try { tg.HapticFeedback.notificationOccurred('success'); } catch (e) {}
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      document.getElementById('i18nCopy').textContent = L.copy;
+    }, 1800);
+  }
 };
 
 spinBtn.onclick = () => {
