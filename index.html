@@ -408,19 +408,35 @@
     color: #fff;
   }
   .modal-btn {
-    background: linear-gradient(135deg, #fbbf24, #f59e0b);
-    color: #1a0b2e;
-    font-size: 16px;
+    background: rgba(255,255,255,0.10);
+    color: #fff;
+    font-size: 15px;
     font-weight: 700;
-    padding: 14px 36px;
-    border: none;
-    border-radius: 30px;
+    padding: 13px 28px;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 28px;
     cursor: pointer;
     width: 100%;
     text-transform: uppercase;
     letter-spacing: 1px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    margin-top: 10px;
+    box-sizing: border-box;
+    font-family: inherit;
   }
   .modal-btn:active { transform: scale(0.96); }
+  /* Главная кнопка действия — зарегистрироваться. Заметный зелёно-золотой градиент. */
+  .modal-btn-primary {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: #1a0b2e !important;
+    font-size: 16px;
+    padding: 16px 28px;
+    border: none;
+    box-shadow: 0 6px 20px rgba(251, 191, 36, 0.35);
+    margin-top: 14px;
+  }
 
   /* Конфетти */
   .confetti-piece {
@@ -485,6 +501,10 @@
         </div>
       </div>
 
+      <a class="modal-btn modal-btn-primary" id="registerBtn" target="_blank" rel="noopener" style="display:none;">
+        <span id="i18nRegister">Register</span>
+      </a>
+
       <button class="modal-btn" id="modalClose">
         <span id="i18nClose">Close</span>
       </button>
@@ -527,42 +547,49 @@ const I18N = {
         nextIn:'Следующая прокрутка через', noBonuses:'Все бонусы уже получены! 🎊',
         wonLabel:'Вы выиграли', close:'Закрыть', error:'Ошибка. Попробуйте позже.', spinning:'Крутится...',
         promoLabel:'Ваш промокод', copy:'Копировать', copied:'Скопировано',
+        register:'🎁 Зарегистрироваться',
         skipHint:'Не хочешь ждать?', skipTo:'Сократить до {min} мин',
         paymentCancelled:'Платёж отменён', paymentFailed:'Платёж не прошёл', purchasing:'Покупка...' },
   en: { title:'🎰 Wheel of Fortune', subtitle:'Spin to win casino bonuses', spin:'Spin',
         nextIn:'Next spin in', noBonuses:'All bonuses claimed! 🎊',
         wonLabel:'You won', close:'Close', error:'Error. Try again later.', spinning:'Spinning...',
         promoLabel:'Your promo code', copy:'Copy', copied:'Copied',
+        register:'🎁 Register now',
         skipHint:"Don't want to wait?", skipTo:'Skip to {min} min',
         paymentCancelled:'Payment cancelled', paymentFailed:'Payment failed', purchasing:'Purchasing...' },
   es: { title:'🎰 Ruleta de la Fortuna', subtitle:'Gira y gana bonos de casino', spin:'Girar',
         nextIn:'Siguiente giro en', noBonuses:'¡Todos los bonos reclamados! 🎊',
         wonLabel:'Has ganado', close:'Cerrar', error:'Error. Inténtalo de nuevo.', spinning:'Girando...',
         promoLabel:'Tu código promocional', copy:'Copiar', copied:'Copiado',
+        register:'🎁 Registrarse',
         skipHint:'¿No quieres esperar?', skipTo:'Reducir a {min} min',
         paymentCancelled:'Pago cancelado', paymentFailed:'Pago fallido', purchasing:'Comprando...' },
   my: { title:'🎰 ကံစမ်းဘီး', subtitle:'လှည့်ပြီး ကာစီနိုဘောနပ်စ်များ ရယူပါ', spin:'လှည့်ရန်',
         nextIn:'နောက်တစ်ကြိမ်လှည့်ရန်', noBonuses:'ဘောနပ်စ်အားလုံး ရရှိပြီးပါပြီ! 🎊',
         wonLabel:'သင်ရရှိသည်', close:'ပိတ်ရန်', error:'အမှားရှိနေသည်။', spinning:'လှည့်နေသည်...',
         promoLabel:'သင်၏ ပရိုမိုကုဒ်', copy:'ကူးယူရန်', copied:'ကူးယူပြီး',
+        register:'🎁 မှတ်ပုံတင်ပါ',
         skipHint:'မစောင့်ချင်ဘူးလား?', skipTo:'{min} မိနစ်အထိ လျှော့ချ',
         paymentCancelled:'ငွေပေးချေမှု ပယ်ဖျက်ပြီး', paymentFailed:'ငွေပေးချေမှု မအောင်မြင်ပါ', purchasing:'ဝယ်ယူနေသည်...' },
   hi: { title:'🎰 भाग्य का चक्र', subtitle:'घुमाएं और कैसीनो बोनस जीतें', spin:'घुमाएं',
         nextIn:'अगला घुमाव में', noBonuses:'सभी बोनस मिल चुके हैं! 🎊',
         wonLabel:'आपने जीता', close:'बंद करें', error:'त्रुटि।', spinning:'घूम रहा है...',
         promoLabel:'आपका प्रोमो कोड', copy:'कॉपी', copied:'कॉपी किया',
+        register:'🎁 अभी रजिस्टर करें',
         skipHint:'इंतज़ार नहीं करना चाहते?', skipTo:'{min} मिनट तक कम करें',
         paymentCancelled:'भुगतान रद्द', paymentFailed:'भुगतान विफल', purchasing:'खरीदना...' },
   uz: { title:'🎰 Omad g\'ildiragi', subtitle:'Aylantiring va kazino bonuslarini yutib oling', spin:'Aylantirish',
         nextIn:'Keyingi aylanish', noBonuses:'Barcha bonuslar olingan! 🎊',
         wonLabel:'Siz yutdingiz', close:'Yopish', error:'Xatolik.', spinning:'Aylanmoqda...',
         promoLabel:'Sizning promo kodingiz', copy:'Nusxalash', copied:'Nusxalandi',
+        register:"🎁 Ro'yxatdan o'tish",
         skipHint:'Kutishni xohlamaysizmi?', skipTo:'{min} daqiqagacha qisqartirish',
         paymentCancelled:"To'lov bekor qilindi", paymentFailed:"To'lov amalga oshmadi", purchasing:'Sotib olinmoqda...' },
   tl: { title:'🎰 Gulong ng Kapalaran', subtitle:'Iikot at manalo ng casino bonuses', spin:'Iikot',
         nextIn:'Susunod na pag-ikot sa', noBonuses:'Nakuha na lahat ng bonus! 🎊',
         wonLabel:'Nanalo ka ng', close:'Isara', error:'May error.', spinning:'Umiikot...',
         promoLabel:'Ang iyong promo code', copy:'Kopyahin', copied:'Nakopya na',
+        register:'🎁 Magparehistro',
         skipHint:'Ayaw maghintay?', skipTo:'Bawasan sa {min} min',
         paymentCancelled:'Kinansela ang bayad', paymentFailed:'Nabigo ang bayad', purchasing:'Bumibili...' }
 };
@@ -576,6 +603,7 @@ document.getElementById('i18nClose').textContent = L.close;
 document.getElementById('i18nPromoLabel').textContent = L.promoLabel;
 document.getElementById('i18nCopy').textContent = L.copy;
 document.getElementById('i18nSkipHint').textContent = L.skipHint;
+document.getElementById('i18nRegister').textContent = L.register;
 
 // ── API ────────────────────────────────────────────────────────────────
 // Базовый адрес API передаётся ботом через query-параметр ?api=...
@@ -906,7 +934,7 @@ async function spin() {
   // Ждём окончания анимации
   await new Promise(r => setTimeout(r, 5200));
 
-  showResult(result.bonus_name, result.promo_code);
+  showResult(result.bonus_name, result.promo_code, result.registration_url);
   fireConfetti();
 
   // Через секунду перезагружаем состояние (включит кулдаун)
@@ -916,7 +944,7 @@ async function spin() {
   }, 1500);
 }
 
-function showResult(name, promoCode) {
+function showResult(name, promoCode, registrationUrl) {
   document.getElementById('modalPrize').textContent = name;
   const promoWrap = document.getElementById('promoWrap');
   const promoEl = document.getElementById('promoCode');
@@ -932,9 +960,36 @@ function showResult(name, promoCode) {
   copyBtn.classList.remove('copied');
   document.getElementById('i18nCopy').textContent = L.copy;
 
+  // Кнопка регистрации: показываем только если URL валидный.
+  // Запоминаем URL на самой кнопке и обработчик откроет его через tg.openLink
+  // (он откроет ссылку во внешнем браузере вне Telegram WebApp).
+  const regBtn = document.getElementById('registerBtn');
+  if (registrationUrl && /^https?:\/\//.test(registrationUrl)) {
+    regBtn.dataset.url = registrationUrl;
+    regBtn.href = registrationUrl;  // fallback для случая, если tg.openLink недоступен
+    regBtn.style.display = 'block';
+  } else {
+    regBtn.style.display = 'none';
+    delete regBtn.dataset.url;
+  }
+
   document.getElementById('modal').classList.add('show');
   try { tg.HapticFeedback.notificationOccurred('success'); } catch (e) {}
 }
+
+document.getElementById('registerBtn').onclick = (e) => {
+  const url = e.currentTarget.dataset.url;
+  if (!url) return;
+  // tg.openLink открывает во внешнем браузере (вне WebApp окна).
+  // Это нужно для редиректов на сайты казино.
+  try {
+    e.preventDefault();
+    tg.openLink(url);
+    try { tg.HapticFeedback.impactOccurred('medium'); } catch (e) {}
+  } catch (err) {
+    // Если tg.openLink почему-то не сработал — пускай браузер обработает href
+  }
+};
 
 document.getElementById('modalClose').onclick = () => {
   document.getElementById('modal').classList.remove('show');
