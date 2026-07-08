@@ -751,8 +751,9 @@ document.getElementById('i18nMoreBelow').textContent = L.moreBelow;
 // Базовый адрес API передаётся ботом через query-параметр ?api=...
 // (см. wheel_url() в bot.py). На случай открытия HTML напрямую — fallback
 // на тот же origin, что и фронт.
-const API_BASE = (new URLSearchParams(location.search).get('api') || '').replace(/\/+$/, '')
-                 || location.origin;
+const API_BASE =
+    (new URLSearchParams(location.search).get('api') || '').replace(/\/+$/, '') ||
+    'https://adegolabs.github.io/webapp-wheel/';
 
 async function api(path, opts = {}) {
   const r = await fetch(API_BASE + path, {
